@@ -22,7 +22,7 @@ public class ProdutoService {
 
     private ProdutoRepository produtoRepository;
     private FabricanteRepository fabricanteRepository;
-    private EntityManager entityManager;
+
 
     public Page<ProdutoEntity> buscarTodos(Integer offset,
                                            Integer limit,
@@ -32,20 +32,20 @@ public class ProdutoService {
 
         return produtoRepository.findAll(
                 where(ProdutoSpecifications.nomeContem(filtros.getNome()))
-                 .and(ProdutoSpecifications.valorMenorQue(filtros.getValor())),
+                        .and(ProdutoSpecifications.valorMenorQue(filtros.getValor())),
                 pageable
         );
     }
 
-    public ProdutoEntity buscarPorId(Long id){
+    public ProdutoEntity buscarPorId(Long id) {
         return produtoRepository.findById(id).get();//TODO adicionar tratativa para optional empty
     }
 
-    public ProdutoEntity buscarPorCodigoBarra(String codigoBarra){
-            return produtoRepository.findByCodigoBarra(codigoBarra);
+    public ProdutoEntity buscarPorCodigoBarra(String codigoBarra) {
+        return produtoRepository.findByCodigoBarra(codigoBarra);
     }
 
-    public ProdutoEntity criar(ProdutoRequest produtoRequest){
+    public ProdutoEntity criar(ProdutoRequest produtoRequest) {
 
         //valida descricao, sanitizacao... retira HTML, scripts de campos texto. pode ser na view.
         Optional<FabricanteEntity> fabricanteEntity = fabricanteRepository.findById(produtoRequest.getIdFabricante());
@@ -55,8 +55,25 @@ public class ProdutoService {
         return produtoRepository.save(produtoEntity);
     }
 
-    private  ProdutoEntity toEntity(ProdutoRequest produtoRequest,
-                                    FabricanteEntity fabricante){
+    public ProdutoEntity remover(Long id) {
+        ProdutoEntity produtoEntity = buscarPorId(id);
+        produtoRepository.delete(produtoEntity);
+        return produtoEntity;
+    }
+
+    public ProdutoEntity atualizar(Long id, ProdutoRequest request) {
+        ProdutoEntity produtoEntity = buscarPorId(id);
+        produtoEntity.setNome(request.getNome());
+        produtoEntity.setDescricao(request.getDescricao());
+        produtoEntity.setValor(request.getValor());
+        produtoEntity.setCodigoBarra(request.getCodigoBarra());
+        produtoEntity.setPeso(request.getPeso());
+        produtoEntity.setPesoUnidadeMedida(request.getPesoUnidadeMedida());
+        return produtoRepository.save(produtoEntity);
+    }
+
+    private ProdutoEntity toEntity(ProdutoRequest produtoRequest,
+                                   FabricanteEntity fabricante) {
         return new ProdutoEntity(
                 produtoRequest.getNome(),
                 produtoRequest.getDescricao(),
@@ -67,6 +84,8 @@ public class ProdutoService {
                 produtoRequest.getPesoUnidadeMedida()
         );
     }
+
+
 
 
 
