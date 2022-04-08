@@ -3,7 +3,8 @@ Projeto de estudo de sistemas, E-comerce
 
 Projeto do modulo: 
 
- Construir um e-commerce onde seja possível gerenciar usuarios e produtos, Criar um carrinho de compras.  
+Construir um e-commerce onde seja possível gerenciar usuarios e produtos, Criar um carrinho de compras.  
+
 
 Produtos:
     Cadastrar, alterar, listar, consultar e remover produtos
@@ -37,3 +38,9 @@ Id carrinho
 data criacao
 data alteracao
 Itens
+
+------------------
+Pendente:
+Adicionar itens no carrinho
+Autenticação
+----------------------
